@@ -1,12 +1,11 @@
-import React from 'react'
 import { Text, View } from 'react-native'
+import { styles } from '../../styles/auth.styles'
 
-const bookmarks = () => {
+export default function BookmarksScreen() {
   return (
-    <View>
-      <Text>bookmarks</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Bookmarks</Text>
+      <Text style={styles.linkText}>No bookmarks saved yet!</Text>
     </View>
   )
 }
-
-export default bookmarks

@@ -1,12 +1,11 @@
-import React from 'react'
 import { Text, View } from 'react-native'
+import { styles } from '../../styles/auth.styles'
 
-const create = () => {
+export default function CreateScreen() {
   return (
-    <View>
-      <Text>create</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Create</Text>
+      <Text style={styles.linkText}>Create something new!</Text>
     </View>
   )
 }
-
-export default create
