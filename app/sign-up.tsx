@@ -26,7 +26,17 @@ export default function SignUpScreen() {
       setPendingVerification(true)
     } catch (err: any) {
       console.error(JSON.stringify(err, null, 2))
-      Alert.alert('Error', err.errors?.[0]?.message || 'An error occurred during sign up.')
+      const errorMessage = err.errors?.[0]?.message || 'An error occurred during sign up.'
+      
+      // Provide helpful message for password breach errors
+      if (errorMessage.toLowerCase().includes('breach') || errorMessage.toLowerCase().includes('pwned')) {
+        Alert.alert(
+          'Password Security Issue', 
+          'This password has been found in a data breach. Please use a completely unique password that you\'ve never used elsewhere.'
+        )
+      } else {
+        Alert.alert('Error', errorMessage)
+      }
     } finally {
       setLoading(false)
     }
