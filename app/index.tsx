@@ -7,7 +7,7 @@ const Index = () => {
   if (isSignedIn) {
     return <Redirect href="/(tabs)" />
   } else {
-    return <Redirect href="/sign-in" />
+    return <Redirect href="/landing" />
   }
 }
 

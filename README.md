@@ -48,3 +48,86 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## Tutorial
+
+## Convex-Clerk User Sync System
+
+This project now includes bidirectional sync between Convex and Clerk for user management.
+
+### Setup Requirements
+
+Add the following environment variable to your Convex deployment:
+
+```bash
+CLERK_SECRET_KEY=sk_test_... # Your Clerk secret key from Clerk Dashboard
+```
+
+### Features
+
+#### 🔒 **Email Uniqueness Enforcement**
+
+- Prevents multiple users from signing up with the same email address
+- Database-level email indexing for fast lookups
+- Descriptive error messages for duplicate email attempts
+
+#### 🔄 **Bidirectional User Sync**
+
+- **Clerk → Convex**: Automatic user creation when someone signs up via Clerk
+- **Convex → Clerk**: Automatic user deletion from Clerk when deleted from Convex
+- **Clerk → Convex**: Automatic user deletion from Convex when deleted from Clerk
+
+### Admin Functions
+
+#### Find Duplicate Users
+
+```javascript
+const duplicates = await convex.query(api.users.findDuplicateEmails);
+console.log(duplicates);
+```
+
+#### Delete User (Both Systems)
+
+```javascript
+// Deletes from both Convex and Clerk
+const result = await convex.mutation(api.users.deleteUser, { 
+    userId: "user_id_here" 
+});
+```
+
+#### Delete User (Convex Only)
+
+```javascript
+// Deletes only from Convex, keeps in Clerk
+const result = await convex.mutation(api.users.deleteUserFromConvexOnly, { 
+    userId: "user_id_here" 
+});
+```
+
+#### Clean Up Duplicates
+
+```javascript
+// Keeps the oldest user, deletes the rest
+const result = await convex.mutation(api.users.cleanupDuplicateUsers, {
+    email: "user@example.com",
+    keepUserId: "user_id_to_keep",
+    deleteFromClerkToo: true
+});
+```
+
+### Webhook Configuration
+
+Make sure your Clerk webhook is configured to send to:
+
+- `POST /clerk-webhook`
+- Events: `user.created`, `user.deleted`
+
+### Error Handling
+
+The system gracefully handles cases where:
+
+- Clerk deletion fails but Convex deletion succeeds
+- User doesn't exist in one system but exists in the other
+- Network issues or API timeouts
+
+All operations are logged for debugging purposes.
