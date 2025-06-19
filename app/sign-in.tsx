@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { Link, router } from 'expo-router'
 import React, { useState } from 'react'
 import { Alert, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { COLORS } from '../constants/colors'
 import { styles } from '../styles/auth.styles'
 
 export default function SignInScreen() {
@@ -45,8 +46,8 @@ export default function SignInScreen() {
       
       {/* Background gradient */}
       <LinearGradient
-        colors={['#667eea', '#764ba2']}
-        style={styles.backgroundGradient}
+        colors={[COLORS.gradientStart, COLORS.gradientEnd]}
+        style={[styles.backgroundGradient, { opacity: 0.15 }]}
       />
       
       <View style={styles.formContainer}>
@@ -56,7 +57,7 @@ export default function SignInScreen() {
           onPress={() => router.back()}
           activeOpacity={0.7}
         >
-          <Ionicons name="arrow-back" size={24} color="#667eea" />
+          <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
 
         {/* Icon */}
@@ -108,7 +109,7 @@ export default function SignInScreen() {
           activeOpacity={0.8}
         >
           <LinearGradient
-            colors={loading ? ['#adb5bd', '#adb5bd'] : ['#667eea', '#764ba2']}
+            colors={loading ? [COLORS.secondary, COLORS.secondary] : [COLORS.gradientStart, COLORS.gradientEnd]}
             style={styles.buttonGradient}
           >
             <Text style={styles.buttonText}>

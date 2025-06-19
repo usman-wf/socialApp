@@ -40,15 +40,15 @@ export default function BookmarksScreen() {
             </View>
           </View>
 
-          <View style={bookmarkStyles.infoCard}>
-            <Ionicons name="share-outline" size={24} color={COLORS.info} />
-            <View style={bookmarkStyles.infoText}>
-              <Text style={bookmarkStyles.infoTitle}>Quick Access</Text>
-              <Text style={bookmarkStyles.infoSubtitle}>
-                Access your saved posts anytime, even when offline
-              </Text>
-            </View>
+      {/*<View style={bookmarkStyles.infoCard}>
+          <Ionicons name="share-outline" size={24} color={COLORS.info} />
+          <View style={bookmarkStyles.infoText}>
+            <Text style={bookmarkStyles.infoTitle}>Quick Access</Text>
+            <Text style={bookmarkStyles.infoSubtitle}>
+              Access your saved posts anytime, even when offline
+            </Text>
           </View>
+        </View>*/}
         </View>
       </ScrollView>
     </View>

@@ -1,14 +1,46 @@
-import { useUser } from '@clerk/clerk-expo'
+import { useAuth, useUser } from '@clerk/clerk-expo'
 import { Ionicons } from '@expo/vector-icons'
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { router } from 'expo-router'
+import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { COLORS } from '../../constants/colors'
 
 export default function ProfileScreen() {
   const { user } = useUser()
+  const { signOut } = useAuth()
+
+  const handleSignOut = async () => {
+    Alert.alert(
+      'Sign Out',
+      'Are you sure you want to sign out?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Sign Out',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await signOut()
+              router.replace('/landing')
+            } catch (error) {
+              console.log(error)
+              Alert.alert('Error', 'Failed to sign out')
+            }
+          },
+        },
+      ]
+    )
+  }
 
   return (
     <View style={profileStyles.container}>
-      <ScrollView style={profileStyles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        style={profileStyles.content} 
+        contentContainerStyle={profileStyles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Profile Header */}
         <View style={profileStyles.headerSection}>
           <View style={profileStyles.avatarContainer}>
@@ -131,6 +163,14 @@ export default function ProfileScreen() {
             <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
           </TouchableOpacity>
         </View>
+
+        {/* Sign Out Section */}
+        <View style={profileStyles.section}>
+          <TouchableOpacity style={profileStyles.signOutButton} onPress={handleSignOut}>
+            <Ionicons name="log-out-outline" size={20} color={COLORS.danger} />
+            <Text style={profileStyles.signOutText}>Sign Out</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   )
@@ -145,6 +185,9 @@ const profileStyles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 60,
+  },
+  scrollContent: {
+    paddingBottom: 100, // Extra space for tab bar and Sign Out button
   },
   headerSection: {
     alignItems: 'center',
@@ -280,5 +323,21 @@ const profileStyles = StyleSheet.create({
     color: COLORS.text,
     fontWeight: '500',
     marginLeft: 16,
+  },
+  signOutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.card,
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: COLORS.danger,
+  },
+  signOutText: {
+    fontSize: 16,
+    color: COLORS.danger,
+    fontWeight: '600',
+    marginLeft: 12,
   },
 });

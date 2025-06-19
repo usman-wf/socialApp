@@ -1,22 +1,11 @@
-import { useAuth } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from "expo-router";
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useQuery } from 'convex/react';
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../../constants/colors";
+import { api } from '../../convex/_generated/api';
 
 export default function Index() {
-  const { signOut } = useAuth()
-  //const { user } = useUser()
-
-  const handleSignOut = async () => {
-    try {
-      await signOut()
-      router.replace('/sign-in')
-    } catch (error) {
-      console.log(error)
-      Alert.alert('Error', 'Failed to sign out')
-    }
-  }
+  const posts = useQuery(api.posts.getFeedPosts);
 
   return (
     <View style={homeStyles.container}>
@@ -29,9 +18,23 @@ export default function Index() {
           
           <Text style={homeStyles.emptyTitle}>Welcome to Your Feed</Text>
           <Text style={homeStyles.emptyDescription}>
-            Posts from people you follow will appear here.
+            {posts === undefined ? 
+              "Loading your feed..." : 
+              posts.length === 0 ? 
+                "Posts from people you follow will appear here." :
+                `You have ${posts.length} posts in your feed.`
+            }
           </Text>
         </View>
+
+        {/* Future: Posts will be displayed here */}
+        {posts && posts.length > 0 && (
+          <View style={homeStyles.postsSection}>
+            <Text style={homeStyles.sectionTitle}>Recent Posts</Text>
+            {/* Posts will be rendered here in future */}
+            <Text style={homeStyles.comingSoon}>Post display coming soon...</Text>
+          </View>
+        )}
       </ScrollView>
     </View>
   );
@@ -77,5 +80,21 @@ const homeStyles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 24,
     maxWidth: 300,
+  },
+  postsSection: {
+    marginTop: 32,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: COLORS.text,
+    marginBottom: 16,
+  },
+  comingSoon: {
+    fontSize: 16,
+    color: COLORS.textMuted,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginTop: 20,
   },
 });
